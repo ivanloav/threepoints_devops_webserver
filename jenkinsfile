@@ -11,9 +11,9 @@ pipeline {
 
         stage('Pruebas de SAST') {
             steps {
-                echo 'Ejecución de pruebas de SAST...'
-                sh 'echo "Ejecución de pruebas de SAST"'
-            }
+            withSonarQubeEnv('SonarQube Local') {
+                    sh 'sonar-scanner -Dsonar.projectKey=my_project -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=mi_token'
+                }
         }
 
         stage('Build') {
