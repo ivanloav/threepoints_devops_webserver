@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Descargando el código desde GitHub...'
+                git branch: 'master', url: 'https://github.com/ivanloav/threepoints_devops_webserver.git'
+            }
+        }
+
+        stage('Pruebas de SAST') {
+            steps {
+                echo 'Ejecución de pruebas de SAST...'
+                sh 'echo "Ejecución de pruebas de SAST"'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Construyendo el contenedor Docker...'
+                sh 'docker build -t devops_ws .'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline ejecutado exitosamente.'
+        }
+        failure {
+            echo 'Hubo un fallo en el pipeline.'
+        }
+    }
+}
