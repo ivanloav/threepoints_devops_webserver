@@ -13,9 +13,9 @@ pipeline {
             }
         }
 
-        stage('Parallel Steps') {
+        stage('Pruebas de SAST') {
             parallel {
-                stage('Pruebas de SAST') {
+                stage('Análisis SonarQube') {
                     steps {
                         withSonarQubeEnv(SONARQUBE_ENV) {
                             sh '''
@@ -66,7 +66,16 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline ejecutado exitosamente.'
+            script {
+                timeout(time: 5, unit: 'MINUTES') {
+                    def qualityGate = waitForQualityGate(abortPipeline: false)
+                    if (qualityGate.status != 'OK') {
+                        echo "Quality Gate failed: ${qualityGate.status}"
+                    } else {
+                        echo "Quality Gate passed successfully"
+                    }
+                }
+            }
         }
         failure {
             echo 'Hubo un fallo en el pipeline.'
