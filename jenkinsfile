@@ -67,12 +67,14 @@ pipeline {
     post {
         success {
             script {
+                echo "Esperando los resultados del Quality Gate..."
                 timeout(time: 5, unit: 'MINUTES') {
                     def qualityGate = waitForQualityGate(abortPipeline: false)
                     if (qualityGate.status != 'OK') {
                         echo "Quality Gate failed: ${qualityGate.status}"
+                        error "El análisis de SonarQube falló debido al Quality Gate"
                     } else {
-                        echo "Quality Gate passed successfully"
+                        echo "Quality Gate passed: ${qualityGate.status}"
                     }
                 }
             }
