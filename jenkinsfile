@@ -30,9 +30,10 @@ pipeline {
                                     -Dsonar.sources=/usr/src \
                                     -Dsonar.host.url=http://192.168.1.56:9000 \
                                     -Dsonar.login=sqp_c895d1c73c8eea74bf1fe9d434189420d48eea4b
-
-                                    # Copiar el archivo de SonarQube para que Jenkins lo vea
-                                    cp /usr/src/.scannerwork/report-task.txt ${WORKSPACE}
+                                    
+                                    # Verificar el contenido del directorio .scannerwork
+                                    echo "Contenido del directorio .scannerwork:"
+                                    ls -la /usr/src/.scannerwork
                                 '''
                             }
                         }
