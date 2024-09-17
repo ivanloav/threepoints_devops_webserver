@@ -40,6 +40,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Build') {
+            steps {
+                echo 'Construyendo el contenedor Docker...'
+                sh 'docker build -t devops_ws .'
+            }
+        }
     }
 
     post {
